@@ -2,5 +2,5 @@
 
 """this file contains all functions for the desktop app"""
 
-class app():
+class SimpleTk():
     """the container class for all functions used"""
