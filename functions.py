@@ -7,4 +7,5 @@ import framework
 class function(framework):
     """put functions here"""
 
-    
+    def quit(self):
+        self.window.destroy()
