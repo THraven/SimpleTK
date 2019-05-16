@@ -3,19 +3,37 @@
 """this file contains all functions for the desktop app"""
 
 import Tkinter as tk
+from PIL import Image, ImageTk
 
-class SimpleTk():
-    """the container class for all functions used"""
+class vars():
+    """the goal of this class is to contain all the propertys and global varibles
+    the SimpleTk class uses."""
 
-    window = tk.Tk()
+    image = {}
     button = {}
     label = {}
     entry = {}
     text = {}
 
+    @property
+    def window(self):
+        """contains the window """
+        if hasattr(self, "_window"):
+            return self._window
+        self._window = tk.Tk()
+        return self._window
+
+    @window.setter
+    def window(self, value):
+        self._window = value
+
+class SimpleTk(vars):
+    """the container class for all functions used"""
+
     def textcheck(f):
         """this will check if the text given is a stringvar or not"""
         def wrapper(*args, **kwargs):
+            args[0].window
             DisplayText = tk.StringVar()
             if "textvariable" in kwargs and not type(kwargs["textvariable"]) == type(DisplayText):
                 DisplayText.set(kwargs["textvariable"])
@@ -47,6 +65,19 @@ class SimpleTk():
         self.label[name]["object"].pack()
 
     @textcheck
+    def InitImage(self, name=None, **kwargs):
+        """This uses labels to display images"""
+        if name == None:
+            name = "image%s" % len(self.image)
+        load = Image.open(kwargs["image"])
+        render = ImageTk.PhotoImage(load)
+        kwargs['image'] = render
+        ImageInctence = tk.Label(self.window, **kwargs)
+        self.image.update({name: {"object": ImageInctence}})
+        self.image[name].update(**kwargs)
+        self.image[name]["object"].pack()
+
+    @textcheck
     def InitEntry(self, name=None, **kwargs):
         """this is for the easy making of entry forms in the app.
         it will store data such as name and text"""
@@ -56,3 +87,5 @@ class SimpleTk():
         self.entry.update({name: {"object": EntryInctence}})
         self.entry[name].update(kwargs)
         self.entry[name]["object"].pack()
+
+    
