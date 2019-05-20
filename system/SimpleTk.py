@@ -13,6 +13,7 @@ class vars():
     button = {}
     label = {}
     entry = {}
+    frame = {}
     text = {}
 
     @property
@@ -30,10 +31,13 @@ class vars():
 class SimpleTk(vars):
     """the container class for all functions used"""
 
-    def textcheck(f):
+    def precheck(f):
         """this will check if the text given is a stringvar or not"""
         def wrapper(*args, **kwargs):
-            args[0].window
+            if not "window" in kwargs:
+                kwargs["window"] = args[0].window
+            else:
+                args[0].window
             DisplayText = tk.StringVar()
             if "textvariable" in kwargs and not type(kwargs["textvariable"]) == type(DisplayText):
                 DisplayText.set(kwargs["textvariable"])
@@ -41,51 +45,60 @@ class SimpleTk(vars):
             return f(*args, **kwargs)
         return wrapper
 
-    @textcheck
-    def InitButton(self, name=None, **kwargs):
+    @precheck
+    def InitButton(self, window=None, name=None, **kwargs):
         """this is for the easy making of buttons in the app.
         and will store some stuff in the """
         # checking if the name is given, if not it will just generate a name
         if name == None:
             name = "button%s" % len(self.button)
-        ButtonInctence = tk.Button(self.window, **kwargs)
+        ButtonInctence = tk.Button(window, **kwargs)
         self.button.update({name: {"object": ButtonInctence}})
         self.button[name].update(kwargs)
         self.button[name]["object"].pack()
 
-    @textcheck
-    def InitLabel(self, name=None, **kwargs):
+    @precheck
+    def InitLabel(self, window=None, name=None, **kwargs):
         """this is for the easy making of labels in the app.
         it will store data such as name and text"""
         if name == None:
             name = "label%s" % len(self.label)
-        LabelInctence = tk.Label(self.window, **kwargs)
+        LabelInctence = tk.Label(window, **kwargs)
         self.label.update({name: {"object": LabelInctence}})
         self.label[name].update(kwargs)
         self.label[name]["object"].pack()
 
-    @textcheck
-    def InitImage(self, name=None, **kwargs):
+    @precheck
+    def InitImage(self, window=None, name=None, **kwargs):
         """This uses labels to display images"""
         if name == None:
             name = "image%s" % len(self.image)
         load = Image.open(kwargs["image"])
         render = ImageTk.PhotoImage(load)
         kwargs['image'] = render
-        ImageInctence = tk.Label(self.window, **kwargs)
+        ImageInctence = tk.Label(window, **kwargs)
         self.image.update({name: {"object": ImageInctence}})
         self.image[name].update(**kwargs)
         self.image[name]["object"].pack()
 
-    @textcheck
-    def InitEntry(self, name=None, **kwargs):
+    @precheck
+    def InitEntry(self, window=None, name=None, **kwargs):
         """this is for the easy making of entry forms in the app.
         it will store data such as name and text"""
         if name == None:
             name = "entry%s" % len(self.entry)
-        EntryInctence = tk.Entry(self.window, **kwargs)
+        EntryInctence = tk.Entry(window, **kwargs)
         self.entry.update({name: {"object": EntryInctence}})
         self.entry[name].update(kwargs)
         self.entry[name]["object"].pack()
 
-    
+    @precheck
+    def InitFrame(self, window=None, name=None, side=tk.TOP, **kwargs):
+        """this is for the easy creation of frames in the window,
+        the frames will be stored in self.frame"""
+        if name == None:
+            name = "frame%s" % len(self.frame)
+        FrameInctence = tk.Frame(window, **kwargs)
+        self.frame.update({name: {"object": FrameInctence}})
+        self.frame[name].update(kwargs)
+        self.frame[name]["object"].pack(side=side)
