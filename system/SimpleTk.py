@@ -13,8 +13,8 @@ class vars():
     button = {}
     label = {}
     entry = {}
+    panel = {}
     frame = {}
-    text = {}
 
     @property
     def window(self):
@@ -102,3 +102,20 @@ class SimpleTk(vars):
         self.frame.update({name: {"object": FrameInctence}})
         self.frame[name].update(kwargs)
         self.frame[name]["object"].pack(side=side)
+
+    def InitPanel(self, pane=None, name=None, **kwargs):
+        """this will return a PanedWindow with must be put
+        in the self.window varible """
+        if pane == None:
+            PanelInctence = tk.PanedWindow()
+            PanelInctence.pack(**kwargs)
+            self.window = PanelInctence
+            return 1
+        else:
+            if name == None:
+                name = "panel%s" % len(self.panel)
+            PanelInctence = tk.PanedWindow(**kwargs)
+            self.panel.update({name: {"object": PanelInctence}})
+            self.panel[name].update(kwargs)
+            self.panel[name]["object"].pack()
+            return 1

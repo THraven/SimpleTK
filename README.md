@@ -4,4 +4,5 @@ A framework for the ease of use of python's de facto standard GUI library, Tkint
 
 ## changelog
 in SimpleTk.py
-* added InitFrame method 
+* added InitFrame method
+* changed name TextCheck to precheck
